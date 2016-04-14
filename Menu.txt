@@ -1,0 +1,9 @@
+Royale with cheese|3.99
+The Big Mac|4.99
+Milkshake|5.00
+CheesBurger|4.50
+Soda|1.65
+Coffee|1.85
+Glazzed Donut|0.99
+French Fries(Med)|1.15
+Chicken Nuggets|3.20

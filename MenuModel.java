@@ -6,23 +6,33 @@ class MenuModel {
 	
 	private String name;
 	private Double price;
+	private int count = 0;;
 	ArrayList<MenuModel> list = new ArrayList<MenuModel>(); 
 	
 	public MenuModel(String name, Double price)
 	{
 		this.name = name;
-		this.price = price;
-		
+		this.price = price;	
+		this.count = 1 ;
 	}
+	
+	
+	
+	
    
-	
-	
-	
-	
 	public String getName() {
 		return name;
 	}
 
+	public int getCount()
+	{
+		return  this.count;
+	}
+	
+	public void incrementCount()
+	{
+		this.count++;
+	}
 	public void setName(String name) {
 		this.name = name;
 	}

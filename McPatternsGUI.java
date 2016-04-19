@@ -1,3 +1,7 @@
+/**
+ * @author Gurpreet Singh
+ */
+
 import javax.swing.*;
 
 import java.awt.*;
@@ -12,6 +16,9 @@ import java.util.ArrayList;
 	public Double total = 0.0;
 	public boolean check = false;
 	public String cCNumber = null;
+	public JPanel buttonPanel = new JPanel();
+	public JLabel totalPanel = new JLabel();
+	
 	public McPatternsGUI(McPatternsPresenter presenter) {
 		
 		this.presenter = presenter;
@@ -19,6 +26,9 @@ import java.util.ArrayList;
 		showGUI();
 
 	}
+	/**
+	 * Loads the main GUI of the system
+	 */
 	private void showGUI() {
 		presenter.loadMenuItems();
 
@@ -46,20 +56,20 @@ import java.util.ArrayList;
 
 		JPanel orderPane = new JPanel();
 		orderPane.setLayout(new BoxLayout(orderPane, BoxLayout.PAGE_AXIS));
-		JLabel orderDetails = new JLabel("Your order");
+		JLabel orderDetails = new JLabel("Your Order");
 		orderPane.setBorder(BorderFactory.createRaisedBevelBorder());
-		orderPane.add(orderDetails);
+		orderPane.add(orderDetails, BoxLayout.X_AXIS);
 		orderPane.setBackground(new Color(0,191,255));
-		JTextField ccEntry = new JTextField("Enter Credit Card #");
-		ccEntry.setPreferredSize(new Dimension(20, 10));
-		JTextField ccNumber = new JTextField("Enter Credit Card number...");
-		JTextField ccType = new JTextField("Credit Card Type(Visa, MasterCard..");
-
-		JLabel totalPanel = new JLabel("Total $ : ");
+		JPanel orderButtons = new JPanel();
+		orderButtons.setLayout(new GridLayout(2,1));
+		
+		totalPanel = new JLabel("Total $ : ");
 		JLabel payStatus = new JLabel("Payment status: ");
 		payStatus.setVisible(false);
 		
-		JButton creditCard = new JButton("Enter Credit Card info");
+		
+		
+		JButton creditCard = new JButton("Pay for Order");
 		creditCard.addActionListener(new ActionListener() {
 
 			@Override
@@ -97,8 +107,10 @@ import java.util.ArrayList;
 					{
 						payStatus.setText("Payment status: Transaction Failed");
 						payStatus.setVisible(true);
+						check = false;
 					}
 				}
+				 	
 				else if(type.equals("MasterCard"))
 				{
 					MasterCC c = new MasterCC(number, type);
@@ -111,7 +123,8 @@ import java.util.ArrayList;
 					else if(c.isValid() == false)
 					{
 						payStatus.setText("Payment status: Transaction Failed");
-						payStatus.setVisible(true)	;
+						payStatus.setVisible(true);
+						check = false;
 					}
 				}
 				else if(type.equals("American Exp"))
@@ -128,7 +141,8 @@ import java.util.ArrayList;
 					else if(c.isValid() == false)
 					{
 						payStatus.setText("Payment status: Transaction Failed");
-						payStatus.setVisible(true)	;
+						payStatus.setVisible(true);
+						check = false;
 					}
 				}
 				else if(type.equals("Discover"))
@@ -144,7 +158,8 @@ import java.util.ArrayList;
 					else if(c.isValid() == false)
 					{
 						payStatus.setText("Payment status: Transaction Failed");
-						payStatus.setVisible(true)	;
+						payStatus.setVisible(true);
+						check = false;
 					}
 				}
 				
@@ -157,74 +172,116 @@ import java.util.ArrayList;
 		JButton confirm = new JButton("Place Order");
 		confirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: Add the function to handle confirmed order
-				//Think about where you will store order and who should manipulate.
-				//Handle the Payment validation before confirming order. Who should validate?
+				
 				if(check == true)
 				{
 				orderDetails.setText("Order confrimed for " + cCNumber);
+				JOptionPane.showMessageDialog(null, "Order Confirmed for : " + cCNumber);
+				presenter.printReciept();
+				
 				}
+				else if(check = false)
+				{
+						orderDetails.setText("Please enter a valid card number");
+						JOptionPane.showMessageDialog(null, "Please enter Credit Card to place order");
+						 
+				
+				}
+				
 			}
 
 		});
 		JButton cancel = new JButton("Cancel Order");
 		cancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: Add the function to h	andle cancel order
-				//Think about where you will store order and who should manipulate.
+				
 				orderDetails.setText("Order cancelled");
+				textArea.setText(null);
+				presenter.orderList.clear();
+				payStatus.setText("Payment Status: ");
+				payStatus.setVisible(false);
+				totalPanel.setText("Total $: ");
+				
+				 
+			}
+
+		});
+		
+		JButton newOrder = new JButton("Clear");
+		newOrder.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e) {
+				orderDetails.setText("Your Order");
+				textArea.setText(null);
+				presenter.orderList.clear();
+				payStatus.setText("Payment Status: ");
+				payStatus.setVisible(false);
+				totalPanel.setText("Total $: ");
+				
+				 
 			}
 
 		});
 		
 		  
-       // JTextArea textArea = new JTextArea();
+        
         textArea.setLineWrap(true);
-        textArea.setBackground(Color.WHITE);
-        textArea.setFont(new Font("Lucida Console", Font.PLAIN, 13));
-        textArea.setForeground(Color.GREEN);
-        //textArea.setBounds(10, 57, 414, 383);
+        textArea.setBackground(Color.gray);
+        textArea.setFont(new Font("Lucida Console", Font.PLAIN, 14));
+        textArea.setForeground(Color.BLACK);
         
       
+        createButtonPanel(); //Creates the panel of menu item buttons in the main frame
+        orderButtons.add(newOrder);
+        orderButtons.add(confirm);
+        orderButtons.add(cancel);
+        orderButtons.add(creditCard);
 
-      //orderPane.add(typeList);
-       //orderPane.add(ccEntry);
-		
 		orderPane.add(textArea);
-		//orderPane.add(ccNumber);
-		//orderPane.add(ccType);
 		orderPane.add(totalPanel);
 		orderPane.add(payStatus);
-		orderPane.add(creditCard);
-		orderPane.add(confirm);
-		orderPane.add(cancel);
-
-		JPanel buttonPanel = new JPanel();
-		//BoxLayout b = new BoxLayout(buttonPanel, BoxLayout.Y_AXIS);
-		//buttonPanel.setLayout(b);
-		buttonPanel.setSize(600, 400);
-		buttonPanel.add(Box.createVerticalGlue()); // To orient the menu buttons vertically
+		orderPane.add(orderButtons);
+		orderPane.setSize(200, 500);
+		
+		
+		theFrame.add(title,BorderLayout.NORTH);
+		theFrame.add(buttonPanel, BorderLayout.CENTER);
+		theFrame.add(orderPane, BorderLayout.EAST);
+		theFrame.pack();
+		theFrame.setSize(800, 500);
+		theFrame.setLocationRelativeTo(null);
+		theFrame.setVisible(true);
+		
+	}
+	
+	public void createButtonPanel()
+	{
+		 buttonPanel = new JPanel();
+		GridLayout b = new GridLayout(10, 1);
+		buttonPanel.setLayout(b);
+		
 		buttonPanel.setBackground(new Color(0,191,255));
-		// TODO: Ask the presenter for the buttons to create. Iterate over the buttons and create them
+		
 		ArrayList<MenuModel> l = presenter.returnMenuItems();
 		for(int i = 0; i < l.size(); i++)
 		{
 			MenuModel m = (MenuModel) l.get(i);
 			JButton bj = new JButton(m.getName() + "|" + m.getPrice());
-			
-			 //bj.putClientProperty("price", m.getPrice());
-			 //bj.addActionListener(this);
+			bj.setBackground(new Color(255,140,0));
+					
+			 
 			    bj.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
 					presenter.addOrder(m);
+					
 					presenter.addPrice(m.getPrice());
 					orderList = presenter.getOrderList();
 					total = presenter.getTotalPrice();
 					
 					if(orderList.size() == 0)
 					{
-						textArea.setText(m.getName() + ": " + m.getPrice());
+						textArea.setText("1x " + m.getName() + ": " + m.getPrice());
 						totalPanel.setText("Total $: " + total);
 					}
 					else if(orderList.size() > 0	)
@@ -236,7 +293,7 @@ import java.util.ArrayList;
 						MenuModel item = orderList.get(i);
 						String name = item.getName();
 						double price = item.getPrice();
-						textArea.append(name + ": "+ price);
+						textArea.append("1x " + name + ": "+ price);
 						textArea.append("\n");
 						presenter.removeOrder(m);
 						totalPanel.setText("Total $: " + total);
@@ -253,21 +310,6 @@ import java.util.ArrayList;
 			buttonPanel.add(bj);	
 			
 		}
-		
-	
-		
-		theFrame.add(title,BorderLayout.NORTH);
-		theFrame.add(buttonPanel, BorderLayout.CENTER);
-		theFrame.add(orderPane, BorderLayout.EAST);
-		
-		theFrame.pack();
-		ccEntry.setPreferredSize(new Dimension(20, 10));
-
-		theFrame.setSize(700, 500);
-		//buttonPanel.setSize(700, 500);
-		//theFrame.setPreferredSize(new Dimension(1000, 200));
-		theFrame.setLocationRelativeTo(null);
-		theFrame.setVisible(true);
 		
 	}
 	

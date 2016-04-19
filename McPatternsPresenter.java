@@ -11,6 +11,7 @@ class McPatternsPresenter { //java -jar McPatterns.jar Myfile.txt
     McPatternsGUI view;
     Double total = 0.0;
     ArrayList<MenuModel> list;
+    ArrayList<MenuModel> tempList = new ArrayList<MenuModel>();
     ArrayList<MenuModel> orderList = new ArrayList<MenuModel>();
   
 
@@ -70,6 +71,8 @@ class McPatternsPresenter { //java -jar McPatterns.jar Myfile.txt
      void addOrder(MenuModel m)
     {
     	orderList.add(m);
+    	tempList.add(m);
+    	
     }
     
     ArrayList<MenuModel> getOrderList()
@@ -79,16 +82,48 @@ class McPatternsPresenter { //java -jar McPatterns.jar Myfile.txt
     void removeOrder(MenuModel m)
     {
     	orderList.remove(m);
+    	
     }
     
     void addPrice(Double p)
     {
     	total += p;
+    	
+    	
     }
     
     public Double getTotalPrice()
     {
-    	return total;
+   	 
+    	
+    	double t = Math.floor(total * 100) / 100;
+
+    	return t;
     }
+    public ArrayList<MenuModel> getTempList()
+    {
+    	
+    	return tempList;
+    }
+    
+    public void printReciept()
+    {
+    	System.out.println("Sending Order to Kitchen................");
+    	ArrayList<MenuModel> l = getTempList();
+    	System.out.println("========================================");
+    	System.out.println("\n");
+    	for(int i = 0; i < l.size(); i++)
+    	{
+    		MenuModel m = l.get(i);
+    	System.out.println(m.getName()+":              " +m.getPrice());
+    	}
+    	System.out.println("======================================== ");
+    	System.out.println("Order Total($): " + getTotalPrice() );
+    }
+    
+    
+    
+   //make a method to keep track of how many items are there for each type 
+    //suggestion - array, hashmap, 
 
 }

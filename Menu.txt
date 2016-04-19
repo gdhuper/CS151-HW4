@@ -1,9 +1,20 @@
 Royale with cheese|3.99
+Big Mac|3.45
+CheesBurger|4.50
+Fiet-O-Fish|3.45
+McChicken|2.95
+HamBurger|6.95
+WesternBurger|4.50
 The Big Mac|4.99
 Milkshake|5.00
-CheesBurger|4.50
 Soda|1.65
 Coffee|1.85
+Onion Rings|3.95
 Glazzed Donut|0.99
 French Fries(Med)|1.15
 Chicken Nuggets|3.20
+Chicken Wings|7.95
+Apple Sauce|1.90
+Chipotle Sala|7.35
+BBq Bacon|4.60
+Apple Pie|3.00
